@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weekly Ship Log</title>
+  <meta name="description" content="Personal journal to track and log what you ship and build each week.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary-start: #1e1b4b;
+      --primary-mid: #4338ca;
+      --primary-end: #7c3aed;
+      --btn-grad-start: #4f46e5;
+      --btn-grad-end: #9333ea;
+      --btn-grad-hover-start: #4338ca;
+      --btn-grad-hover-end: #7e22ce;
+      --bg-page: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --danger-color: #ef4444;
+      --danger-hover-bg: #fee2e2;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.06);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.08);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px 48px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    /* Header Section */
+    .header-card {
+      background: linear-gradient(135deg, var(--primary-start) 0%, var(--primary-mid) 50%, var(--primary-end) 100%);
+      color: #ffffff;
+      border-radius: var(--radius-lg);
+      padding: 32px 28px;
+      text-align: center;
+      box-shadow: var(--shadow-lg);
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header-card::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.12) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .header-title {
+      font-size: 1.85rem;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .header-subtitle {
+      font-size: 1rem;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    /* Main Content Card */
+    .main-card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-color);
+      margin-bottom: 24px;
+    }
+
+    /* Input Area */
+    .input-section {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .textarea-wrapper {
+      position: relative;
+      margin-bottom: 8px;
+    }
+
+    .log-textarea {
+      width: 100%;
+      height: 120px;
+      padding: 14px 16px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      color: var(--text-main);
+      background-color: #fcfdfe;
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-md);
+      resize: vertical;
+      min-height: 100px;
+      max-height: 350px;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+      line-height: 1.5;
+    }
+
+    .log-textarea:focus {
+      background-color: #ffffff;
+      border-color: var(--btn-grad-start);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+    }
+
+    .log-textarea::placeholder {
+      color: #94a3b8;
+    }
+
+    .textarea-meta {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-bottom: 14px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .char-counter {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .save-btn {
+      align-self: flex-start;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%);
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 12px 24px;
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(79, 70, 229, 0.25);
+      transition: all 0.2s ease;
+    }
+
+    .save-btn:hover {
+      background: linear-gradient(135deg, var(--btn-grad-hover-start) 0%, var(--btn-grad-hover-end) 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(79, 70, 229, 0.35);
+    }
+
+    .save-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 4px rgba(79, 70, 229, 0.25);
+    }
+
+    /* Inline Error Message */
+    .error-msg {
+      display: none;
+      color: var(--danger-color);
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-top: 10px;
+      align-items: center;
+      gap: 6px;
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    .error-msg.visible {
+      display: flex;
+    }
+
+    /* Previous Entries Section */
+    .entries-section {
+      margin-top: 32px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .entries-count-badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      background-color: #ede9fe;
+      color: var(--primary-mid);
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+
+    .divider {
+      height: 1px;
+      background-color: var(--border-color);
+      margin-bottom: 20px;
+      border: none;
+    }
+
+    /* Entries List */
+    .entries-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .entry-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      animation: fadeIn 0.35s ease-out;
+    }
+
+    .entry-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      border-color: #cbd5e1;
+    }
+
+    .entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px dashed #f1f5f9;
+    }
+
+    .entry-date {
+      font-size: 0.825rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .delete-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 0.85rem;
+      cursor: pointer;
+      padding: 6px 8px;
+      border-radius: var(--radius-sm);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s ease;
+      line-height: 1;
+    }
+
+    .delete-btn:hover {
+      background-color: var(--danger-hover-bg);
+      color: var(--danger-color);
+    }
+
+    .entry-content {
+      font-size: 0.95rem;
+      color: var(--text-main);
+      white-space: pre-wrap;
+      word-break: break-word;
+      line-height: 1.6;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-muted);
+      background-color: #f8fafc;
+      border: 2px dashed #e2e8f0;
+      border-radius: var(--radius-md);
+      margin-top: 8px;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .empty-icon {
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .empty-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #475569;
+      margin-bottom: 4px;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Mobile Responsive Styling (max-width: 480px) */
+    @media (max-width: 480px) {
+      body {
+        padding: 12px 10px 32px;
+      }
+
+      .header-card {
+        padding: 24px 16px;
+        border-radius: var(--radius-md);
+        margin-bottom: 16px;
+      }
+
+      .header-title {
+        font-size: 1.5rem;
+      }
+
+      .header-subtitle {
+        font-size: 0.9rem;
+      }
+
+      .main-card {
+        padding: 18px 14px;
+        border-radius: var(--radius-md);
+      }
+
+      .save-btn {
+        width: 100%;
+        padding: 14px 20px;
+      }
+
+      .entry-card {
+        padding: 14px 16px;
+        border-radius: var(--radius-sm);
+      }
+
+      .entry-header {
+        flex-direction: row;
+        align-items: center;
+      }
+
+      .entry-date {
+        font-size: 0.775rem;
+      }
+
+      .delete-btn {
+        padding: 4px 6px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header-card">
+      <h1 class="header-title" id="appTitle">📝 Weekly Ship Log</h1>
+      <p class="header-subtitle" id="appSubtitle">What did you ship this week?</p>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="main-card">
+      <!-- Input Section -->
+      <section class="input-section" aria-labelledby="input-heading">
+        <h2 id="input-heading" class="sr-only" style="display:none;">Log New Entry</h2>
+        
+        <div class="textarea-wrapper">
+          <textarea
+            id="logInput"
+            class="log-textarea"
+            placeholder="I built the login feature, fixed the navbar bug, and..."
+            aria-label="Journal entry progress"
+            maxlength="1000"
+          ></textarea>
+        </div>
+
+        <div class="textarea-meta">
+          <span id="charCount" class="char-counter">0 / 1000 characters</span>
+        </div>
+
+        <button type="button" id="saveBtn" class="save-btn">
+          <span>Save Entry</span>
+        </button>
+
+        <div id="errorMessage" class="error-msg" role="alert" aria-live="polite">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          <span>Please write something before saving.</span>
+        </div>
+      </section>
+
+      <!-- Previous Entries Section -->
+      <section class="entries-section" aria-labelledby="entries-heading">
+        <div class="section-header">
+          <h2 id="entries-heading" class="section-title">
+            📋 Previous Entries
+          </h2>
+          <span id="entryCountBadge" class="entries-count-badge" style="display: none;">0 entries</span>
+        </div>
+        <hr class="divider">
+
+        <div id="entriesList" class="entries-list">
+          <!-- Entries rendered here dynamically -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="empty-state" style="display: none;">
+          <span class="empty-icon">🚀</span>
+          <div class="empty-title">No entries yet. Ship something today!</div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      const STORAGE_KEY = 'weekly_ship_log_entries';
+      const MAX_CHARS = 1000;
+
+      // DOM Elements
+      const logInput = document.getElementById('logInput');
+      const saveBtn = document.getElementById('saveBtn');
+      const errorMessage = document.getElementById('errorMessage');
+      const charCount = document.getElementById('charCount');
+      const entriesList = document.getElementById('entriesList');
+      const emptyState = document.getElementById('emptyState');
+      const entryCountBadge = document.getElementById('entryCountBadge');
+
+      let errorTimeout = null;
+
+      // Format Date according to spec: "September 1, 2026 at 3:30 PM"
+      function formatEntryDate(dateObj) {
+        const date = dateObj instanceof Date ? dateObj : new Date(dateObj);
+        
+        const dateOptions = {
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric'
+        };
+
+        const timeOptions = {
+          hour: 'numeric',
+          minute: '2-digit',
+          hour12: true
+        };
+
+        const datePart = date.toLocaleDateString('en-US', dateOptions);
+        const timePart = date.toLocaleTimeString('en-US', timeOptions);
+
+        return `${datePart} at ${timePart}`;
+      }
+
+      // Safe LocalStorage helper functions
+      function getStoredEntries() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          return raw ? JSON.parse(raw) : [];
+        } catch (err) {
+          console.error('Failed to read entries from localStorage:', err);
+          return [];
+        }
+      }
+
+      function saveStoredEntries(entries) {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+        } catch (err) {
+          console.error('Failed to save entries to localStorage:', err);
+        }
+      }
+
+      // Show inline error message temporarily
+      function showError(msg) {
+        if (msg) {
+          const span = errorMessage.querySelector('span');
+          if (span) span.textContent = msg;
+        }
+        errorMessage.classList.add('visible');
+
+        if (errorTimeout) clearTimeout(errorTimeout);
+        errorTimeout = setTimeout(() => {
+          errorMessage.classList.remove('visible');
+        }, 4000);
+      }
+
+      function hideError() {
+        if (errorTimeout) clearTimeout(errorTimeout);
+        errorMessage.classList.remove('visible');
+      }
+
+      // Render Entries list
+      function renderEntries() {
+        const entries = getStoredEntries();
+        entriesList.innerHTML = '';
+
+        if (!entries || entries.length === 0) {
+          emptyState.style.display = 'block';
+          entryCountBadge.style.display = 'none';
+          return;
+        }
+
+        emptyState.style.display = 'none';
+        entryCountBadge.textContent = `${entries.length} ${entries.length === 1 ? 'entry' : 'entries'}`;
+        entryCountBadge.style.display = 'inline-block';
+
+        // Entries are already maintained in reverse chronological order
+        entries.forEach((entry) => {
+          const card = document.createElement('article');
+          card.className = 'entry-card';
+          card.id = `entry-${entry.id}`;
+
+          const header = document.createElement('div');
+          header.className = 'entry-header';
+
+          const dateSpan = document.createElement('span');
+          dateSpan.className = 'entry-date';
+          dateSpan.innerHTML = `
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:-1px;">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            ${escapeHTML(entry.formattedDate || formatEntryDate(entry.timestamp))}
+          `;
+
+          const deleteBtn = document.createElement('button');
+          deleteBtn.type = 'button';
+          deleteBtn.className = 'delete-btn';
+          deleteBtn.setAttribute('aria-label', 'Delete this entry');
+          deleteBtn.innerHTML = '🗑️ <span>Delete</span>';
+          deleteBtn.onclick = function () {
+            handleDeleteEntry(entry.id);
+          };
+
+          header.appendChild(dateSpan);
+          header.appendChild(deleteBtn);
+
+          const contentDiv = document.createElement('div');
+          contentDiv.className = 'entry-content';
+          contentDiv.textContent = entry.text;
+
+          card.appendChild(header);
+          card.appendChild(contentDiv);
+          entriesList.appendChild(card);
+        });
+      }
+
+      // Handle Adding a new entry
+      function handleSaveEntry() {
+        const text = logInput.value.trim();
+
+        if (!text) {
+          showError('Please write something before saving.');
+          logInput.focus();
+          return;
+        }
+
+        hideError();
+
+        const now = new Date();
+        const newEntry = {
+          id: Date.now().toString(36) + Math.random().toString(36).substring(2, 7),
+          text: text,
+          timestamp: now.toISOString(),
+          formattedDate: formatEntryDate(now)
+        };
+
+        const entries = getStoredEntries();
+        // Insert at beginning for reverse chronological order
+        entries.unshift(newEntry);
+        saveStoredEntries(entries);
+
+        // Reset input area
+        logInput.value = '';
+        updateCharCounter();
+        renderEntries();
+      }
+
+      // Handle Deleting an entry with confirm prompt
+      function handleDeleteEntry(entryId) {
+        const confirmDelete = window.confirm('Are you sure you want to delete this log entry?');
+        if (!confirmDelete) return;
+
+        const entries = getStoredEntries();
+        const updatedEntries = entries.filter((item) => item.id !== entryId);
+        saveStoredEntries(updatedEntries);
+        renderEntries();
+      }
+
+      // Character counter update
+      function updateCharCounter() {
+        const length = logInput.value.length;
+        charCount.textContent = `${length} / ${MAX_CHARS} characters`;
+      }
+
+      // Helper to escape potential HTML in strings
+      function escapeHTML(str) {
+        if (!str) return '';
+        return str
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
+
+      // Event Listeners
+      saveBtn.addEventListener('click', handleSaveEntry);
+
+      logInput.addEventListener('input', () => {
+        updateCharCounter();
+        if (logInput.value.trim().length > 0) {
+          hideError();
+        }
+      });
+
+      // Allow Ctrl+Enter or Cmd+Enter to quickly save
+      logInput.addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+          e.preventDefault();
+          handleSaveEntry();
+        }
+      });
+
+      // Initial Load
+      updateCharCounter();
+      renderEntries();
+    })();
+  </script>
+</body>
+</html>
