@@ -8,6 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
   
   <style>
     :root {
@@ -90,7 +92,14 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 10px;
+    }
+
+    .header-title .lucide {
+      width: 30px;
+      height: 30px;
+      stroke-width: 2.25;
+      color: #c7d2fe;
     }
 
     .header-subtitle {
@@ -180,6 +189,12 @@
       transition: all 0.2s ease;
     }
 
+    .save-btn .lucide {
+      width: 18px;
+      height: 18px;
+      stroke-width: 2.2;
+    }
+
     .save-btn:hover {
       background: linear-gradient(135deg, var(--btn-grad-hover-start) 0%, var(--btn-grad-hover-end) 100%);
       transform: translateY(-1px);
@@ -201,6 +216,12 @@
       align-items: center;
       gap: 6px;
       animation: fadeIn 0.25s ease-out;
+    }
+
+    .error-msg .lucide {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
     }
 
     .error-msg.visible {
@@ -226,6 +247,13 @@
       display: flex;
       align-items: center;
       gap: 8px;
+    }
+
+    .section-title .lucide {
+      width: 20px;
+      height: 20px;
+      color: var(--primary-mid);
+      stroke-width: 2.2;
     }
 
     .entries-count-badge {
@@ -286,19 +314,32 @@
       gap: 6px;
     }
 
+    .entry-date .lucide {
+      width: 14px;
+      height: 14px;
+      color: #94a3b8;
+    }
+
     .delete-btn {
       background: transparent;
       border: none;
       color: #94a3b8;
       font-size: 0.85rem;
+      font-weight: 500;
       cursor: pointer;
       padding: 6px 8px;
       border-radius: var(--radius-sm);
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
       transition: all 0.2s ease;
       line-height: 1;
+    }
+
+    .delete-btn .lucide {
+      width: 15px;
+      height: 15px;
+      stroke-width: 2;
     }
 
     .delete-btn:hover {
@@ -326,10 +367,17 @@
       animation: fadeIn 0.3s ease-out;
     }
 
-    .empty-icon {
-      font-size: 2.2rem;
+    .empty-icon-wrapper {
+      display: flex;
+      justify-content: center;
       margin-bottom: 10px;
-      display: block;
+    }
+
+    .empty-icon-lucide {
+      width: 42px;
+      height: 42px;
+      color: var(--primary-mid);
+      stroke-width: 1.75;
     }
 
     .empty-title {
@@ -405,7 +453,10 @@
   <div class="container">
     <!-- Header -->
     <header class="header-card">
-      <h1 class="header-title" id="appTitle">📝 Weekly Ship Log</h1>
+      <h1 class="header-title" id="appTitle">
+        <i data-lucide="notebook-pen"></i>
+        <span>Weekly Ship Log</span>
+      </h1>
       <p class="header-subtitle" id="appSubtitle">What did you ship this week?</p>
     </header>
 
@@ -430,15 +481,12 @@
         </div>
 
         <button type="button" id="saveBtn" class="save-btn">
+          <i data-lucide="plus-circle"></i>
           <span>Save Entry</span>
         </button>
 
         <div id="errorMessage" class="error-msg" role="alert" aria-live="polite">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"></circle>
-            <line x1="12" y1="8" x2="12" y2="12"></line>
-            <line x1="12" y1="16" x2="12.01" y2="16"></line>
-          </svg>
+          <i data-lucide="alert-circle"></i>
           <span>Please write something before saving.</span>
         </div>
       </section>
@@ -447,7 +495,8 @@
       <section class="entries-section" aria-labelledby="entries-heading">
         <div class="section-header">
           <h2 id="entries-heading" class="section-title">
-            📋 Previous Entries
+            <i data-lucide="clipboard-list"></i>
+            <span>Previous Entries</span>
           </h2>
           <span id="entryCountBadge" class="entries-count-badge" style="display: none;">0 entries</span>
         </div>
@@ -459,7 +508,9 @@
 
         <!-- Empty State -->
         <div id="emptyState" class="empty-state" style="display: none;">
-          <span class="empty-icon">🚀</span>
+          <div class="empty-icon-wrapper">
+            <i data-lucide="rocket" class="empty-icon-lucide"></i>
+          </div>
           <div class="empty-title">No entries yet. Ship something today!</div>
         </div>
       </section>
@@ -481,6 +532,13 @@
       const entryCountBadge = document.getElementById('entryCountBadge');
 
       let errorTimeout = null;
+
+      // Refresh Lucide Icons in DOM
+      function refreshIcons() {
+        if (window.lucide && typeof window.lucide.createIcons === 'function') {
+          window.lucide.createIcons();
+        }
+      }
 
       // Format Date according to spec: "September 1, 2026 at 3:30 PM"
       function formatEntryDate(dateObj) {
@@ -550,6 +608,7 @@
         if (!entries || entries.length === 0) {
           emptyState.style.display = 'block';
           entryCountBadge.style.display = 'none';
+          refreshIcons();
           return;
         }
 
@@ -569,18 +628,15 @@
           const dateSpan = document.createElement('span');
           dateSpan.className = 'entry-date';
           dateSpan.innerHTML = `
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:-1px;">
-              <circle cx="12" cy="12" r="10"></circle>
-              <polyline points="12 6 12 12 16 14"></polyline>
-            </svg>
-            ${escapeHTML(entry.formattedDate || formatEntryDate(entry.timestamp))}
+            <i data-lucide="clock"></i>
+            <span>${escapeHTML(entry.formattedDate || formatEntryDate(entry.timestamp))}</span>
           `;
 
           const deleteBtn = document.createElement('button');
           deleteBtn.type = 'button';
           deleteBtn.className = 'delete-btn';
           deleteBtn.setAttribute('aria-label', 'Delete this entry');
-          deleteBtn.innerHTML = '🗑️ <span>Delete</span>';
+          deleteBtn.innerHTML = '<i data-lucide="trash-2"></i> <span>Delete</span>';
           deleteBtn.onclick = function () {
             handleDeleteEntry(entry.id);
           };
@@ -596,6 +652,8 @@
           card.appendChild(contentDiv);
           entriesList.appendChild(card);
         });
+
+        refreshIcons();
       }
 
       // Handle Adding a new entry
@@ -678,6 +736,7 @@
       // Initial Load
       updateCharCounter();
       renderEntries();
+      refreshIcons();
     })();
   </script>
 </body>
