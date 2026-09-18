@@ -8,13 +8,15 @@ A modern, distraction-free, single-file personal journal for developers to track
 
 - **Browser Persistence**: All ship log entries are automatically saved to `localStorage` and persist across page refreshes.
 - **Modern & Clean Aesthetics**: Designed with a sleek purple-to-indigo gradient header, polished card components, subtle drop shadows, and modern typography powered by Google Fonts (Inter).
-- **Lucide Icons**: Fully integrated with crisp Lucide Icons for buttons, status indicators, timestamps, and empty states.
+- **Lucide Icons**: Every button, status indicator, timestamp, and empty state uses crisp Lucide Icons — no emoji anywhere in the UI.
 - **Reverse Chronological Order**: Displays entries with newest updates at the very top.
 - **Live Character Counter**: Real-time counter (`0 / 1000 characters`) to keep entries concise.
-- **Accidental Deletion Protection**: Confirmation modal prompt before deleting any log entry.
-- **Keyboard Shortcuts**: Quickly save entries using <kbd>Cmd</kbd> + <kbd>Enter</kbd> (Mac) or <kbd>Ctrl</kbd> + <kbd>Enter</kbd> (Windows/Linux).
+- **Edit Entries**: Each entry card has an ✏️ Edit button that opens an inline textarea pre-filled with the original text. Changes are saved instantly with a `(edited)` badge, or discarded with Cancel.
+- **Clear All Entries**: A ghost-style "Clear All Entries" button appears in the header whenever entries exist. It prompts for confirmation before wiping all data.
+- **Accidental Deletion Protection**: Confirmation prompt before deleting any individual log entry.
+- **Keyboard Shortcuts**: Quickly save entries using <kbd>Cmd</kbd> + <kbd>Enter</kbd> (Mac) or <kbd>Ctrl</kbd> + <kbd>Enter</kbd> (Windows/Linux). Also supports <kbd>Cmd/Ctrl</kbd> + <kbd>Enter</kbd> inside the edit textarea to save changes.
 - **Inline Error Validation**: User-friendly, temporary inline error messages if an empty submission is attempted.
-- **Fully Responsive**: Fluid, mobile-optimized interface with full-width tap targets for devices under `480px`.
+- **Fully Responsive**: Fluid, mobile-optimized interface with full-width tap targets for devices under `600px`.
 - **Zero Build Tools Required**: Pure HTML, CSS, and Vanilla JavaScript inside a single `index.html` file.
 
 ---
@@ -63,7 +65,9 @@ npx serve .
 1. **Write Your Update**: Type what you shipped or built into the input area.
 2. **Save**: Click **Save Entry** or press <kbd>Cmd/Ctrl</kbd> + <kbd>Enter</kbd>.
 3. **Review**: See your previous entries rendered in reverse chronological order with formatted timestamps.
-4. **Delete**: Click the **Delete** button on any entry card to permanently remove it after confirming.
+4. **Edit**: Click the **Edit** button on any entry card to update its content inline. Save or Cancel when done.
+5. **Delete**: Click the **Delete** button on any entry card to permanently remove it after confirming.
+6. **Clear All**: Use the **Clear All Entries** button in the header to wipe the entire log after confirming.
 
 ---
 
@@ -72,5 +76,6 @@ npx serve .
 ```text
 weeklyshiplogtracker/
 ├── index.html       # Complete single-file application (HTML, CSS, JS)
-└── README.md        # Documentation and guide
+├── README.md        # Documentation and guide
+└── Journal.md       # Development log and changelog
 ```

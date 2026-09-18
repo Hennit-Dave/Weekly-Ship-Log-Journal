@@ -2,9 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
   <title>Weekly Ship Log</title>
   <meta name="description" content="Personal journal to track and log what you ship and build each week.">
+  
+  <!-- Apple & Mobile Web App Meta Tags -->
+  <meta name="theme-color" content="#1e1b4b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Ship Log">
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -46,12 +53,14 @@
       background-color: var(--bg-page);
       color: var(--text-main);
       min-height: 100vh;
+      min-height: 100dvh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 24px 16px 48px;
+      padding: max(24px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(48px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .container {
@@ -85,7 +94,7 @@
     }
 
     .header-title {
-      font-size: 1.85rem;
+      font-size: clamp(1.4rem, 4vw, 1.85rem);
       font-weight: 700;
       letter-spacing: -0.025em;
       margin-bottom: 6px;
@@ -93,17 +102,19 @@
       align-items: center;
       justify-content: center;
       gap: 10px;
+      flex-wrap: wrap;
     }
 
     .header-title .lucide {
-      width: 30px;
-      height: 30px;
+      width: 28px;
+      height: 28px;
       stroke-width: 2.25;
       color: #c7d2fe;
+      flex-shrink: 0;
     }
 
     .header-subtitle {
-      font-size: 1rem;
+      font-size: clamp(0.875rem, 2.5vw, 1rem);
       font-weight: 400;
       color: rgba(255, 255, 255, 0.85);
     }
@@ -134,17 +145,18 @@
       height: 120px;
       padding: 14px 16px;
       font-family: inherit;
-      font-size: 0.95rem;
+      font-size: 16px; /* 16px prevents iOS Safari from auto-zooming on focus */
       color: var(--text-main);
       background-color: #fcfdfe;
       border: 1.5px solid var(--border-color);
       border-radius: var(--radius-md);
       resize: vertical;
-      min-height: 100px;
+      min-height: 110px;
       max-height: 350px;
       outline: none;
       transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
       line-height: 1.5;
+      -webkit-appearance: none;
     }
 
     .log-textarea:focus {
@@ -182,11 +194,15 @@
       font-size: 0.95rem;
       font-weight: 600;
       padding: 12px 24px;
+      min-height: 44px; /* HIG tap target standard */
       border: none;
       border-radius: var(--radius-md);
       cursor: pointer;
       box-shadow: 0 2px 4px rgba(79, 70, 229, 0.25);
       transition: all 0.2s ease;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
     }
 
     .save-btn .lucide {
@@ -202,7 +218,7 @@
     }
 
     .save-btn:active {
-      transform: translateY(0);
+      transform: scale(0.98);
       box-shadow: 0 2px 4px rgba(79, 70, 229, 0.25);
     }
 
@@ -212,7 +228,7 @@
       color: var(--danger-color);
       font-size: 0.875rem;
       font-weight: 500;
-      margin-top: 10px;
+      margin-top: 12px;
       align-items: center;
       gap: 6px;
       animation: fadeIn 0.25s ease-out;
@@ -261,7 +277,7 @@
       font-weight: 600;
       background-color: #ede9fe;
       color: var(--primary-mid);
-      padding: 2px 8px;
+      padding: 3px 10px;
       border-radius: 999px;
     }
 
@@ -303,6 +319,7 @@
       margin-bottom: 10px;
       padding-bottom: 8px;
       border-bottom: 1px dashed #f1f5f9;
+      gap: 8px;
     }
 
     .entry-date {
@@ -312,12 +329,14 @@
       display: flex;
       align-items: center;
       gap: 6px;
+      flex-wrap: wrap;
     }
 
     .entry-date .lucide {
       width: 14px;
       height: 14px;
       color: #94a3b8;
+      flex-shrink: 0;
     }
 
     .delete-btn {
@@ -327,13 +346,19 @@
       font-size: 0.85rem;
       font-weight: 500;
       cursor: pointer;
-      padding: 6px 8px;
+      padding: 8px 10px;
+      min-height: 44px; /* HIG tap target standard */
+      min-width: 44px;
       border-radius: var(--radius-sm);
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 5px;
       transition: all 0.2s ease;
       line-height: 1;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
     }
 
     .delete-btn .lucide {
@@ -345,6 +370,54 @@
     .delete-btn:hover {
       background-color: var(--danger-hover-bg);
       color: var(--danger-color);
+    }
+
+    .delete-btn:active {
+      background-color: #fecaca;
+      color: #dc2626;
+      transform: scale(0.95);
+    }
+
+    /* ── Edit button ── */
+    .edit-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;           /* same muted grey as delete */
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 8px 10px;
+      min-height: 44px;
+      min-width: 44px;
+      border-radius: var(--radius-sm);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: all 0.2s ease;
+      line-height: 1;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+
+    .edit-btn:hover {
+      background-color: #e2e8f0;  /* subtle dark-grey bg */
+      color: #334155;             /* dark slate text */
+    }
+
+    .edit-btn:active {
+      background-color: #cbd5e1;
+      color: #1e293b;
+      transform: scale(0.95);
+    }
+
+    /* Button group wrapper */
+    .entry-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;   /* comfortable space between Edit and Delete */
+      flex-shrink: 0;
     }
 
     .entry-content {
@@ -387,6 +460,75 @@
       margin-bottom: 4px;
     }
 
+    /* Clear All button — ghost style, lives inside gradient header */
+    .header-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 18px;
+    }
+
+    .clear-all-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;                             /* space between icon and text */
+      padding: 9px 20px;                   /* internal breathing room */
+      background: rgba(255, 255, 255, 0.12); /* semi-transparent white fill */
+      color: rgba(255, 255, 255, 0.9);      /* white text to match header */
+      border: 1px solid rgba(255, 255, 255, 0.3); /* soft white outline */
+      font-family: inherit;
+      font-size: 0.83rem;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      letter-spacing: 0.02em;
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+      position: relative;
+      z-index: 1;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .clear-all-btn:hover {
+      background: rgba(255, 255, 255, 0.22);
+      border-color: rgba(255, 255, 255, 0.5);
+      transform: translateY(-1px);
+    }
+
+    .clear-all-btn:active {
+      background: rgba(255, 255, 255, 0.28);
+      transform: translateY(0) scale(0.97);
+    }
+
+    .clear-all-btn.hidden {
+      display: none;
+    }
+
+    .clear-all-btn .lucide {
+      width: 14px;
+      height: 14px;
+      stroke-width: 2;
+    }
+
+    .edit-btn .lucide {
+      width: 15px;
+      height: 15px;
+      stroke-width: 2;
+    }
+
+    .save-changes-btn .lucide {
+      width: 15px;
+      height: 15px;
+      stroke-width: 2;
+    }
+
+    .cancel-edit-btn .lucide {
+      width: 15px;
+      height: 15px;
+      stroke-width: 2;
+    }
+
     /* Animations */
     @keyframes fadeIn {
       from {
@@ -399,20 +541,26 @@
       }
     }
 
-    /* Mobile Responsive Styling (max-width: 480px) */
-    @media (max-width: 480px) {
+    /* iPhone & Mobile Responsive Styling (< 600px) */
+    @media (max-width: 600px) {
       body {
-        padding: 12px 10px 32px;
+        padding: max(16px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(32px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
       }
 
       .header-card {
-        padding: 24px 16px;
+        padding: 24px 18px;
         border-radius: var(--radius-md);
         margin-bottom: 16px;
       }
 
       .header-title {
-        font-size: 1.5rem;
+        font-size: 1.45rem;
+        gap: 8px;
+      }
+
+      .header-title .lucide {
+        width: 24px;
+        height: 24px;
       }
 
       .header-subtitle {
@@ -420,22 +568,38 @@
       }
 
       .main-card {
-        padding: 18px 14px;
+        padding: 20px 16px;
         border-radius: var(--radius-md);
+      }
+
+      .log-textarea {
+        font-size: 16px; /* Ensures no auto-zoom on iOS */
+        padding: 12px 14px;
+        min-height: 100px;
       }
 
       .save-btn {
         width: 100%;
+        min-height: 48px;
+        font-size: 1rem;
         padding: 14px 20px;
+        border-radius: var(--radius-md);
+      }
+
+      .entries-section {
+        margin-top: 24px;
+      }
+
+      .section-title {
+        font-size: 1.1rem;
       }
 
       .entry-card {
         padding: 14px 16px;
-        border-radius: var(--radius-sm);
+        border-radius: var(--radius-md);
       }
 
       .entry-header {
-        flex-direction: row;
         align-items: center;
       }
 
@@ -444,7 +608,33 @@
       }
 
       .delete-btn {
-        padding: 4px 6px;
+        padding: 6px 10px;
+        font-size: 0.8rem;
+      }
+    }
+
+    /* Compact iPhone Screens (iPhone SE, iPhone mini < 380px) */
+    @media (max-width: 380px) {
+      .header-card {
+        padding: 20px 14px;
+      }
+
+      .header-title {
+        font-size: 1.3rem;
+      }
+
+      .main-card {
+        padding: 16px 12px;
+      }
+
+      .entry-header {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .entry-date {
+        font-size: 0.75rem;
       }
     }
   </style>
@@ -458,6 +648,14 @@
         <span>Weekly Ship Log</span>
       </h1>
       <p class="header-subtitle" id="appSubtitle">What did you ship this week?</p>
+
+      <!-- FEATURE 2: Clear All Entries button -->
+      <div class="header-actions">
+        <button type="button" id="clearAllBtn" class="clear-all-btn hidden" aria-label="Clear all entries">
+          <i data-lucide="trash-2"></i>
+          <span>Clear All Entries</span>
+        </button>
+      </div>
     </header>
 
     <!-- Main Content Container -->
@@ -581,7 +779,7 @@
         }
       }
 
-      // Show inline error message temporarily
+      // Show inline error message temporarily (new-entry form)
       function showError(msg) {
         if (msg) {
           const span = errorMessage.querySelector('span');
@@ -600,10 +798,29 @@
         errorMessage.classList.remove('visible');
       }
 
+      // ── FEATURE 1: Track which entry is currently being edited ──
+      let currentlyEditingId = null;
+
+      // ── FEATURE 2: Clear All button ──
+      const clearAllBtn = document.getElementById('clearAllBtn');
+
+      function updateClearAllVisibility(entries) {
+        if (!clearAllBtn) return; // guard: element might not exist
+        if (entries && entries.length > 0) {
+          clearAllBtn.classList.remove('hidden');
+        } else {
+          clearAllBtn.classList.add('hidden');
+        }
+      }
+
       // Render Entries list
       function renderEntries() {
         const entries = getStoredEntries();
         entriesList.innerHTML = '';
+        currentlyEditingId = null;
+
+        // Update Clear All button visibility
+        updateClearAllVisibility(entries);
 
         if (!entries || entries.length === 0) {
           emptyState.style.display = 'block';
@@ -625,24 +842,38 @@
           const header = document.createElement('div');
           header.className = 'entry-header';
 
+          // Date span with optional (edited) badge
           const dateSpan = document.createElement('span');
           dateSpan.className = 'entry-date';
           dateSpan.innerHTML = `
             <i data-lucide="clock"></i>
             <span>${escapeHTML(entry.formattedDate || formatEntryDate(entry.timestamp))}</span>
+            ${entry.edited ? '<span class="edited-badge">(edited)</span>' : ''}
           `;
+
+          // ── FEATURE 1: Button group wrapping Edit + Delete ──
+          const actionsDiv = document.createElement('div');
+          actionsDiv.className = 'entry-actions';
+
+          const editBtn = document.createElement('button');
+          editBtn.type = 'button';
+          editBtn.className = 'edit-btn';
+          editBtn.setAttribute('aria-label', 'Edit this entry');
+          editBtn.innerHTML = '<i data-lucide="pencil"></i> <span>Edit</span>';
+          editBtn.onclick = function () { handleEditEntry(entry.id); };
 
           const deleteBtn = document.createElement('button');
           deleteBtn.type = 'button';
           deleteBtn.className = 'delete-btn';
           deleteBtn.setAttribute('aria-label', 'Delete this entry');
           deleteBtn.innerHTML = '<i data-lucide="trash-2"></i> <span>Delete</span>';
-          deleteBtn.onclick = function () {
-            handleDeleteEntry(entry.id);
-          };
+          deleteBtn.onclick = function () { handleDeleteEntry(entry.id); };
+
+          actionsDiv.appendChild(editBtn);
+          actionsDiv.appendChild(deleteBtn);
 
           header.appendChild(dateSpan);
-          header.appendChild(deleteBtn);
+          header.appendChild(actionsDiv);
 
           const contentDiv = document.createElement('div');
           contentDiv.className = 'entry-content';
@@ -654,6 +885,118 @@
         });
 
         refreshIcons();
+      }
+
+      // ── FEATURE 1: Switch a card into edit mode ──
+      function handleEditEntry(entryId) {
+        // If another card is already being edited, cancel it first
+        if (currentlyEditingId && currentlyEditingId !== entryId) {
+          cancelEdit(currentlyEditingId);
+        }
+
+        currentlyEditingId = entryId;
+
+        const entries = getStoredEntries();
+        const entry = entries.find((e) => e.id === entryId);
+        if (!entry) return;
+
+        const card = document.getElementById(`entry-${entryId}`);
+        if (!card) return;
+
+        // Highlight card while editing
+        card.classList.add('is-editing');
+
+        // Replace content div with an editable textarea
+        const contentDiv = card.querySelector('.entry-content');
+        if (!contentDiv) return;
+
+        const editTextarea = document.createElement('textarea');
+        editTextarea.className = 'entry-edit-textarea';
+        editTextarea.value = entry.text;
+        editTextarea.setAttribute('aria-label', 'Edit entry text');
+        editTextarea.id = `edit-textarea-${entryId}`;
+
+        // Inline error for empty save attempt
+        const editErrorMsg = document.createElement('div');
+        editErrorMsg.className = 'edit-error-msg';
+        editErrorMsg.id = `edit-error-${entryId}`;
+        editErrorMsg.textContent = 'Entry cannot be empty.';
+
+        card.replaceChild(editTextarea, contentDiv);
+        card.appendChild(editErrorMsg);
+
+        // Replace Edit + Delete buttons with Save Changes + Cancel
+        const actionsDiv = card.querySelector('.entry-actions');
+        if (actionsDiv) {
+          actionsDiv.innerHTML = '';
+
+          const saveChangesBtn = document.createElement('button');
+          saveChangesBtn.type = 'button';
+          saveChangesBtn.className = 'save-changes-btn';
+          saveChangesBtn.setAttribute('aria-label', 'Save changes to this entry');
+          saveChangesBtn.innerHTML = '<i data-lucide="save"></i> <span>Save Changes</span>';
+          saveChangesBtn.onclick = function () { handleSaveChanges(entryId); };
+
+          const cancelBtn = document.createElement('button');
+          cancelBtn.type = 'button';
+          cancelBtn.className = 'cancel-edit-btn';
+          cancelBtn.setAttribute('aria-label', 'Cancel editing this entry');
+          cancelBtn.innerHTML = '<i data-lucide="x"></i> <span>Cancel</span>';
+          cancelBtn.onclick = function () { cancelEdit(entryId); };
+
+          actionsDiv.appendChild(saveChangesBtn);
+          actionsDiv.appendChild(cancelBtn);
+        }
+
+        // Keyboard shortcuts inside the edit textarea
+        editTextarea.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape') {
+            e.preventDefault();
+            cancelEdit(entryId);
+          }
+          if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+            e.preventDefault();
+            handleSaveChanges(entryId);
+          }
+        });
+
+        // Focus and move cursor to end
+        editTextarea.focus();
+        editTextarea.selectionStart = editTextarea.selectionEnd = editTextarea.value.length;
+      }
+
+      // ── FEATURE 1: Save the edited entry ──
+      function handleSaveChanges(entryId) {
+        const editTextarea = document.getElementById(`edit-textarea-${entryId}`);
+        const editErrorMsg = document.getElementById(`edit-error-${entryId}`);
+        if (!editTextarea) return;
+
+        const newText = editTextarea.value.trim();
+
+        if (!newText) {
+          if (editErrorMsg) editErrorMsg.classList.add('visible');
+          editTextarea.focus();
+          return;
+        }
+
+        if (editErrorMsg) editErrorMsg.classList.remove('visible');
+
+        const entries = getStoredEntries();
+        const idx = entries.findIndex((e) => e.id === entryId);
+        if (idx === -1) return;
+
+        entries[idx].text = newText;
+        entries[idx].edited = true;
+
+        saveStoredEntries(entries);
+        currentlyEditingId = null;
+        renderEntries();
+      }
+
+      // ── FEATURE 1: Cancel editing — re-render restores original view ──
+      function cancelEdit(entryId) {
+        currentlyEditingId = null;
+        renderEntries();
       }
 
       // Handle Adding a new entry
@@ -698,6 +1041,16 @@
         renderEntries();
       }
 
+      // ── FEATURE 2: Clear all entries ──
+      function handleClearAll() {
+        const confirmed = window.confirm('Are you sure you want to delete ALL entries? This cannot be undone.');
+        if (!confirmed) return;
+
+        localStorage.removeItem(STORAGE_KEY);
+        currentlyEditingId = null;
+        renderEntries();
+      }
+
       // Character counter update
       function updateCharCounter() {
         const length = logInput.value.length;
@@ -717,6 +1070,7 @@
 
       // Event Listeners
       saveBtn.addEventListener('click', handleSaveEntry);
+      if (clearAllBtn) clearAllBtn.addEventListener('click', handleClearAll); // guard: null-safe
 
       logInput.addEventListener('input', () => {
         updateCharCounter();
@@ -725,7 +1079,7 @@
         }
       });
 
-      // Allow Ctrl+Enter or Cmd+Enter to quickly save
+      // Allow Ctrl+Enter or Cmd+Enter to quickly save a new entry
       logInput.addEventListener('keydown', (e) => {
         if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
           e.preventDefault();
